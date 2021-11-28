@@ -1,19 +1,19 @@
-// // !!! the beginning text to take in data and pass it through to console it
-var profileDataArgs = process.argv.slice(2, process.argv.length);
-console.log(profileDataArgs);
-profileDataArgs = process.argv.slice(2);
+// // // !!! the beginning text to take in data and pass it through to console it
+// var profileDataArgs = process.argv.slice(2, process.argv.length);
+// console.log(profileDataArgs);
+// profileDataArgs = process.argv.slice(2);
 
-// ES6 feature: assignment destructuring
-const [name, github] = profileDataArgs;
+// // ES6 feature: assignment destructuring
+// const [name, github] = profileDataArgs;
 
-const { profile } = require('console');
+// const { profile } = require('console');
 
 const inquirer = require('inquirer');
 
-const {writeFile, copyFile } = require('./utils/generate-site.js');
-    
 // // call the page-template
 const generatePage = require('./src/page-template.js');
+
+const {writeFile, copyFile } = require('./utils/generate-site.js');
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -51,8 +51,12 @@ const promptUser = () => {
 };
 
 const promptProject = portfolioData => {
+    console.log(`
+    =================
+    Add a New Project
+    =================
+    `);
 
-        portfolioData.projects = [];
         // if there's no 'projects' array property, create one
         if (!portfolioData.projects) {
         portfolioData.projects = [];
