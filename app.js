@@ -1,14 +1,21 @@
 // // !!! the beginning text to take in data and pass it through to console it
-// var profileDataArgs = process.argv.slice(2, process.argv.length);
-// console.log(profileDataArgs);
-// profileDataArgs = process.argv.slice(2);
+var profileDataArgs = process.argv.slice(2, process.argv.length);
+console.log(profileDataArgs);
+profileDataArgs = process.argv.slice(2);
 
-// // ES6 feature: assignment destructuring
-// const [name, github] = profileDataArgs;
+// ES6 feature: assignment destructuring
+const [name, github] = profileDataArgs;
 
-// const { profile } = require('console');
+const { profile } = require('console');
 
 const inquirer = require('inquirer');
+
+    // // call the fs module 
+    const fs = require('fs');
+    
+// // call the page-template
+const generatePage = require('./src/page-template.js');
+
 const promptUser = () => {
     return inquirer.prompt([
         {
@@ -88,6 +95,7 @@ const promptProject = portfolioData => {
                 type: 'input',
                 name: 'link',
                 message: 'Enter the Github link to your project. (Required)',
+                // this makes sure that they have to enter something in
                 validate: githubLink => {
                     if (githubLink) {
                         return true;
@@ -107,6 +115,7 @@ const promptProject = portfolioData => {
                 type: 'input',
                 name: 'about',
                 message: 'Provide some information about yourself:',
+                // This triggers "WHEN" cofirmAbout is selected from the question above
                 when: ({ confirmAbout }) => {
                     if (confirmAbout) {
                         return true;
@@ -142,13 +151,17 @@ const promptProject = portfolioData => {
 
     promptUser()
     .then(promptProject)
-    .then(projectAnswers => console.log(projectAnswers));
-    
-    // // call the fs module 
-    // const fs = require('fs');
-    
-// // call the page-template
-// const generatePage = require('./src/page-template.js');
+    .then(portfolioData => {
+        const pageHTML = generatePage(portfolioData);
+
+        // // call the fs method and insert three arguments : file name, where the data is coming from, and a call back (error) as the theird
+        fs.writeFile('./index.html', pageHTML, err => {
+            if (err) throw new Error(err);
+
+          console.log('Page created! Check out index.html in this directory to see it!');
+        });
+    });
+
 
 // const pageHTML = generatePage(name, github);
 
@@ -156,8 +169,7 @@ const promptProject = portfolioData => {
 // fs.writeFile('index.html', generatePage(name, github), err => {
 //     if (err) throw new Error(err);
 
-//     console.log('Portfolio complete! Check out index.html to see the output!')
-// })
+
 
 
 
@@ -174,7 +186,5 @@ const promptProject = portfolioData => {
 // };
 
 // printProfileData(profileDataArgs);
-
-
 
 
